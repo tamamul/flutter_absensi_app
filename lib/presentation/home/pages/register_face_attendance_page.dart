@@ -60,6 +60,7 @@ class _RegisterFaceAttendancePageState
   }
 
   void _initializeCamera() async {
+    _availableCameras = await availableCameras();
     _controller = CameraController(
       description,
       ResolutionPreset.high,
@@ -71,6 +72,14 @@ class _RegisterFaceAttendancePageState
       if (!mounted) {
         return;
       }
+
+      _controller!.startImageStream((CameraImage image) {
+        if (!isBusy) {
+          isBusy = true;
+          frame = image;
+          doFaceDetectionOnFrame();
+        }
+      });
 
       setState(() {});
     });
@@ -197,7 +206,7 @@ class _RegisterFaceAttendancePageState
     }
 
     setState(() {
-      // isBusy = false;
+      isBusy = false;
       _scanResults = recognitions;
     });
   }
@@ -338,12 +347,12 @@ class _RegisterFaceAttendancePageState
                 child: CameraPreview(_controller!),
               ),
             ),
-            // Positioned(
-            //     top: 0.0,
-            //     left: 0.0,
-            //     width: size.width,
-            //     height: size.height,
-            //     child: buildResult()),
+            Positioned(
+                top: 0.0,
+                left: 0.0,
+                width: size.width,
+                height: size.height,
+                child: buildResult()),
             Positioned(
               bottom: 5.0,
               left: 0.0,
