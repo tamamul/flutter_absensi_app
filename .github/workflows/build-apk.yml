@@ -1,6 +1,9 @@
-name: Build Flutter APK on PR
+name: Build Flutter APK on Push or PR (Fork)
 
 on:
+  push:
+    branches:
+      - main   # Jalan setiap ada commit di main fork kamu
   pull_request:
     branches:
       - main
