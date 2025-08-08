@@ -2,11 +2,10 @@ name: Build Flutter APK
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch: # biar bisa run manual dari GitHub
 
 jobs:
   build:
@@ -21,6 +20,10 @@ jobs:
         with:
           flutter-version: '3.22.3'
           channel: 'stable'
+          cache: true
+
+      - name: Flutter version check
+        run: flutter --version
 
       - name: Install dependencies
         run: flutter pub get
@@ -32,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk       
