@@ -28,6 +28,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Patch old DialogTheme API
+        run: |
+          grep -rl "DialogTheme(" lib/ | xargs sed -i 's/DialogTheme(/DialogThemeData(/g' || true
+
       - name: Build release APK
         run: flutter build apk --release
 
